@@ -1,5 +1,5 @@
 
-const ExpressServer = require('./packages/ExpressServer');
+const ExpressServer = require('./packages/ExpressServer').getInstance();
 
 module.exports = {
     ExpressServer
