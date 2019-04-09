@@ -34,3 +34,5 @@ class FilePathLoaderSingleton {
         return FilePathLoaderSingleton.instance; 
     }
 }
+
+module.exports = FilePathLoaderSingleton;
