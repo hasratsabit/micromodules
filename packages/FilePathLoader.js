@@ -1,3 +1,4 @@
+const { lstatSync, readdirSync } = require('fs');
 class FilePathLoader {
     constructor() {}
 
