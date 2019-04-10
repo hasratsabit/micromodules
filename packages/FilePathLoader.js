@@ -4,18 +4,18 @@ class FilePathLoader {
 
     loadPaths(dirPath, identifier) {
         let filesPathArray = [];
-        let isDirectory = source => lstatSync(source).isDirectory();
+        let isDirectory = (source) => lstatSync(source).isDirectory();
         const processFilePath = (dirPath, file, identifier) => {
             let splitedFile = file.split(".");
-            let isMatchedIdentifier = splitedFile[splitedFile.length - 2] === identifier;
+            let isMatchedIdentifier = (splitedFile.length && splitedFile.length > 2)  ? splitedFile[splitedFile.length - 2] === identifier : false;
             if(!isMatchedIdentifier) return false;
             // splitedFile.splice(splitedFile.indexOf("js"));
-            let formatedFilePath = `${dirPath}/${splitedFile.join(".")}`;
+            let formatedFilePath = path.join(dirPath, file);
             return formatedFilePath;
         }
         if(!isDirectory(dirPath)) throw new Error("Please provide a directory path.");
         readdirSync(dirPath).map(dirContent => {
-            let nestedDir = `${dirPath}/${dirContent}`;
+            let nestedDir = path.join(dirPath, dirContent);
             if(!isDirectory(nestedDir)) {
                 let isValidPath = processFilePath(dirPath, dirContent, identifier);
                 if(isValidPath) filesPathArray.push(isValidPath);
