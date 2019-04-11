@@ -5,6 +5,7 @@ const cors = require('cors');
 class ExpressServer {
     constructor() {
         this.app = express();
+        this.router = express.Router();
     }
 
     async start(options = {}) {
