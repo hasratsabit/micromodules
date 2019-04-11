@@ -2,7 +2,7 @@ const FilePathLoaderSingleton = require('./FilePathLoader');
 
 class RouteLoader {
     constructor() {}
-    load(routesDirPath, server) {
+    loadRoutes(routesDirPath, server) {
         let pathLoader = FilePathLoaderSingleton.getInstance();
         let routesArray = pathLoader.loadPaths(routesDirPath, 'route');
         for(let route of routesArray) {
