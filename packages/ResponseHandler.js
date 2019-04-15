@@ -58,3 +58,5 @@ class ReponseHandler {
         ResponseHandler.respondWith(res, 503, 'Service Unavailable', detail);
       }
 }
+
+module.exports = ReponseHandler;
