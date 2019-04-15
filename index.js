@@ -5,6 +5,9 @@ const RouteLoader = require('./packages/RouteLoader').getInstance();
 const TokenService = require('./packages/TokenService').getInstance();
 const ValidationService = require('./packages/ValidationService').getInstance();
 const ReponseHandler = require('./packages/ResponseHandler');
+const ModelLoader = require('./packages/ModelLoader').getInstance();
+const PasswordService = require('./packages/PasswordService').getInstance();
+
 
 module.exports = {
     ExpressServer,
@@ -12,5 +15,7 @@ module.exports = {
     RouteLoader,
     TokenService,
     ValidationService,
-    ReponseHandler
+    ReponseHandler,
+    ModelLoader,
+    PasswordService
 }
