@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 
 class PasswordService {
     constructor() {}
-    hashPassword(password) {
+    async hashPassword(password) {
         try {
             if(!password) throw new Error("No password was provided.");
             let salt = await bcrypt.genSalt(10);
@@ -13,7 +13,7 @@ class PasswordService {
         }
     }
     
-    isPasswordMatched(password, hashedPassword) {
+    async isPasswordMatched(password, hashedPassword) {
         try {
             if(!password || !hashedPassword) throw new Error("Password or hashed password is missing.");
             let isMatched = await bcrypt.compareSync(password, hashedPassword);
