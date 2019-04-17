@@ -7,6 +7,7 @@ const ValidationService = require('./packages/ValidationService').getInstance();
 const ReponseHandler = require('./packages/ResponseHandler');
 const ModelLoader = require('./packages/ModelLoader').getInstance();
 const PasswordService = require('./packages/PasswordService').getInstance();
+const MongoConnector = require('./packages/MongoConnector').getInstance();
 
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
     ValidationService,
     ReponseHandler,
     ModelLoader,
-    PasswordService
+    PasswordService,
+    MongoConnector
 }
