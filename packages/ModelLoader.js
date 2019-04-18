@@ -1,13 +1,11 @@
-const FilePathLoader = require('../packages/FilePathLoader').getInstance();
 class ModelLoader {
     constructor() {}
     load(modelsPathArray = []) {
         try {
             if(!modelsPathArray || modelsPathArray.length === 0) throw new Error("No able to import models.");
             let models = new Map();
-            for(let modelPath of modelsPathArray) {
-                let loadedModel = require(modelPath);
-                let modelInstance = loadedModel.load();
+            for(let schemaModel of modelsPathArray) {
+                let modelInstance = schemaModel.load();
                 models.set(modelInstance.name, modelInstance.model);
             }
             return models;
