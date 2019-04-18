@@ -1,10 +1,8 @@
 const FilePathLoader = require('../packages/FilePathLoader').getInstance();
 class ModelLoader {
     constructor() {}
-    load(modelsPath, modelIdentifier = '') {
+    load(modelsPathArray = []) {
         try {
-            let defaultIdentifier = modelIdentifier || 'model'
-            let modelsPathArray = FilePathLoader.loadPaths(modelsPath, defaultIdentifier);
             if(!modelsPathArray || modelsPathArray.length === 0) throw new Error("No able to import models.");
             let models = new Map();
             for(let modelPath of modelsPathArray) {
