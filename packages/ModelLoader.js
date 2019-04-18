@@ -1,4 +1,4 @@
-
+const FilePathLoader = require('../packages/FilePathLoader').getInstance();
 class ModelLoader {
     constructor() {}
     load(modelsPath, modelIdentifier = '') {
