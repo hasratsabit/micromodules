@@ -1,9 +1,13 @@
+const FileLoader = require('../packages/FileLoader').getInstance();
+
 class RouteLoader {
     constructor() {}
-    loadRoutes(routesArray, server) {
-        if(!Array.isArray(routesArray)) routesArray = [routesArray];
+    loadRoutes(routesPath, server, models, identifier = "") {
+        if(!routesPath) throw new Error("No path provided for routes.");
+        identifier = identifier || "route"
+        let  routesArray = FileLoader.loadFiles(routesPath, identifier);
         for(let Route of routesArray) {
-            let routeInstance = new Route(server);
+            let routeInstance = new Route(server, models);
             if(!routeInstance.register) throw new Error("Register function is missing. Please register routes.");
             routeInstance.register();
         }
@@ -17,5 +21,6 @@ class RouteLoaderSingleton {
         return RouteLoaderSingleton.instance;
     }
 }
+
 
 module.exports = RouteLoaderSingleton;
