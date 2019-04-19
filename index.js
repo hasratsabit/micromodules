@@ -1,6 +1,6 @@
 
 const ExpressServer = require('./packages/ExpressServer').getInstance();
-const FilePathLoader = require('./packages/FilePathLoader').getInstance();
+const FileLoader = require('./packages/FileLoader').getInstance();
 const RouteLoader = require('./packages/RouteLoader').getInstance();
 const TokenService = require('./packages/TokenService').getInstance();
 const ValidationService = require('./packages/ValidationService').getInstance();
@@ -12,7 +12,7 @@ const MongoConnector = require('./packages/MongoConnector').getInstance();
 
 module.exports = {
     ExpressServer,
-    FilePathLoader,
+    FileLoader,
     RouteLoader,
     TokenService,
     ValidationService,
