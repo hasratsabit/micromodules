@@ -1,53 +1,63 @@
-const {
-    lstatSync,
-    readdirSync
-} = require('fs');
+const {lstatSync, readdirSync} = require('fs');
 const path = require('path');
-class FilePathLoader {
-    constructor() {}
 
-    formatFilePath(dirPath, file, identifier) {
+class FileLoader {
+    constructor(){
+        this.identifier;
+        this.directoryPath;
+    }
+
+    isDirectory(directory) {
+        return lstatSync(directory).isDirectory();
+    }
+
+    identifyFile(file) {
         let splitedFile = file.split(".");
-        let isMatchedIdentifier = (splitedFile.length && splitedFile.length > 2) ? splitedFile[splitedFile.length - 2] === identifier : false;
-        if (!isMatchedIdentifier) return false;
-        splitedFile.splice(splitedFile.indexOf("js"));
-        let combinedDirs = dirPath.split("/");
-        // If the first directory is the same as the formatted dir passed to loadPaths, delete the passed root dir.
-        if (combinedDirs[0] === this.formattedDirPath) combinedDirs.shift();
-        combinedDirs = path.join(this.directoryPath, combinedDirs.toString()); // Add the main the dir with full path
-        let formatedFilePath = path.join(combinedDirs, splitedFile.join(".")); // Add combined dirs with formated file.
-        return formatedFilePath;
+        let isMatchedFile = (splitedFile.length && splitedFile.length > 2) ? splitedFile[splitedFile.length - 2] === this.identifier : false;
+        if(isMatchedFile) return splitedFile.join(".");
     }
 
-    loadPaths(directoryPath, identifier) {
-        this.directoryPath = directoryPath; // Make it available to the entire class.
-        this.formattedDirPath = directoryPath.split(".").join("").split(""); // Delete any dot passed as full path and recreate char array.
-        if (this.formattedDirPath[0] === '/') this.formattedDirPath.shift();
-        this.formattedDirPath = this.formattedDirPath.join("");
-
+    getFilesPath() {
+        let dirPath = this.directoryPath;
         let filesPathArray = [];
-        let isDirectory = (source) => lstatSync(source).isDirectory();
-        if (!isDirectory(this.formattedDirPath)) throw new Error("Please provide a directory path.");
-        readdirSync(this.formattedDirPath).map(dirContent => {
-            let nestedDir = path.join(this.formattedDirPath, dirContent);
-            if (!isDirectory(nestedDir)) {
-                let isValidPath = this.formatFilePath(directoryPath, dirContent, identifier);
-                if (isValidPath) filesPathArray.push(isValidPath);
-            } else return readdirSync(nestedDir).map(nestedFile => {
-                let validFilePath = this.formatFilePath(nestedDir, nestedFile, identifier)
-                if (validFilePath) filesPathArray.push(validFilePath);
-            })
-        });
+        readdirSync(dirPath).map((nestedContent) => {
+            let nestedDirPath = path.join(dirPath, nestedContent);
+            if(!this.isDirectory(nestedDirPath)) {
+               let identifiedFile = this.identifyFile(nestedContent);
+                if(identifiedFile) filesPathArray.push(path.join(dirPath, identifiedFile));
+            }
+            else if(this.isDirectory(nestedDirPath)) {
+                readdirSync(nestedDirPath).map((file) => {
+                   let identifiedFile = this.identifyFile(file);
+                   if(identifiedFile) filesPathArray.push(path.join(nestedDirPath, identifiedFile));
+                })
+            }
+        })
         return filesPathArray;
-
     }
+
+    loadFiles(directoryPath, identifier) {
+        if(!directoryPath || !identifier) throw new Error("One of the parameters is missing.");
+        if(!this.isDirectory(directoryPath)) throw new Error("Provided argument is not a directory.");
+        this.directoryPath = directoryPath;
+        this.identifier = identifier;
+        let filesPathArray = this.getFilesPath();
+        let loadedFilesArray = []
+        for(let filePath of filesPathArray) {
+            let loadedFile = require(path.resolve(filePath));
+            loadedFilesArray.push(loadedFile);
+        }
+        return loadedFilesArray;
+    }
+    
 }
 
-class FilePathLoaderSingleton {
+
+class FileLoaderSingleton {
     static getInstance() {
-        if (!FilePathLoaderSingleton.instance) FilePathLoaderSingleton.instance = new FilePathLoader();
-        return FilePathLoaderSingleton.instance;
+        if(!FileLoaderSingleton.instance) FileLoaderSingleton.instance = new FileLoader();
+        return FileLoaderSingleton.instance;
     }
 }
 
-module.exports = FilePathLoaderSingleton;
+module.exports = FileLoaderSingleton;
