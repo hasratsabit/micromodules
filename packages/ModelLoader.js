@@ -1,10 +1,15 @@
+const FileLoader = require('./FileLoader').getInstance();
+
 class ModelLoader {
     constructor() {}
-    load(modelsPathArray = []) {
+    loadModels(modelsPath, identifier = "") {
         try {
-            if(!modelsPathArray || modelsPathArray.length === 0) throw new Error("No able to import models.");
+            if(!modelsPath) throw new Error("No model path was provided.");
+            identifier = identifier || "model";
+            let modelsArray = FileLoader.loadFiles(modelsPath, identifier);
+            if(!modelsArray || modelsArray.length === 0) return [];
             let models = new Map();
-            for(let schemaModel of modelsPathArray) {
+            for(let schemaModel of modelsArray) {
                 if(!schemaModel.load) throw new Error("No load function is provided.");
                 let modelInstance = schemaModel.load();
                 models.set(modelInstance.name, modelInstance.model);
@@ -22,5 +27,7 @@ class ModelLoaderSingleton {
         return ModelLoaderSingleton.instance;
     }
 }
+
+
 
 module.exports = ModelLoaderSingleton;
