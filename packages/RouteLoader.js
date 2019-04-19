@@ -1,5 +1,3 @@
-const FilePathLoaderSingleton = require('./FilePathLoader');
-
 class RouteLoader {
     constructor() {}
     loadRoutes(routesArray, server) {
