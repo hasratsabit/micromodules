@@ -14,7 +14,7 @@ class ServiceLoader {
             let service = serviceObject.getService();
             servicesList.set(service.name, new service.service(modelsList));
         }
-        return modelsList;
+        return servicesList;
     }
 }
 
