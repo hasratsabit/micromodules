@@ -1,4 +1,4 @@
-class ReponseHandler {
+class ResponseHandler {
     constructor() {}
     static respondWith(res, httpStatus, title, detail) {
         res.status(httpStatus).send({
@@ -59,4 +59,4 @@ class ReponseHandler {
       }
 }
 
-module.exports = ReponseHandler;
+module.exports = ResponseHandler;
