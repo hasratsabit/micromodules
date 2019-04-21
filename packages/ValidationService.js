@@ -48,21 +48,26 @@ class ValidationService {
         }
     }
 
-    checkString(string = '') {
-        try {
-            if (!string || string.length === 0) throw new Error("No string was provided.");
-            let response = {
-                isValid: true
-            };
-            let regExp = new RegExp(/^[a-zA-Z0-9 ]+$/);
-            if (!regExp.test(string)) {
-                response.isValid = false;
-                response.message = "String can only contain numbers and letters.";
-            }
-            return response;
-        } catch (error) {
-            throw error;
+    validateString(options) {
+        if (!options.fieldsToCheck || options.fieldsToCheck.length === 0) throw new Error("No field names are provided.");
+        let defaultOptions = {
+            sourceObject: {},
+            fieldsToCheck: []
         }
+        for (let prop in defaultOptions) {
+            if (options.hasOwnProperty(prop)) defaultOptions[prop] = options[prop];
+        }
+        let validationResponse = {
+            success: true,
+        }
+        let regExp = new RegExp(/^[a-zA-Z0-9 ]+$/);
+        for (let field of defaultOptions.fieldsToCheck) {
+            if (!regExp.test(defaultOptions.sourceObject[field])) {
+                validationResponse.success = false;
+                validationResponse.message = `${field || "field"} can only contain numbers and letters.`;
+            }
+        }
+        return validationResponse;
     }
 }
 
