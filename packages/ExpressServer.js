@@ -8,11 +8,14 @@ class ExpressServer {
         this.router = express.Router();
     }
 
-    async start(options = {}) {
+    loadMiddlewares() {
+        this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use(bodyParser.json());
+        this.app.use(cors());
+    }
+
+    start(options = {}) {
         try {
-            this.app.use(bodyParser.json());
-            this.app.use(bodyParser.urlencoded({extended: false}));
-            this.app.use(cors());
             const port = options.httpPort || 3000;
             this.app.listen(port, () => {
                 console.log(`Server is running on port ${port}`);
