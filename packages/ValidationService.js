@@ -1,24 +1,34 @@
 class ValidationService {
     constructor() {}
 
-    checkLength(string, options = {}) {
-        try {
-            if (!string) throw new Error("No string was provided.");
-            string = string.trim();
-            let defaultOptions = {};
-            let response = {
-                success: true
-            };
-            defaultOptions.min = options.min || 8;
-            defaultOptions.max = options.max || 15;
-            if (string.length < defaultOptions.min || string.length > defaultOptions.length) {
-                response.success = false;
-                response.message = `Text must be at least ${defaultOptions.min}, but no more than ${defaultOptions.max} characters.`;
-            }
-            return response;
-        } catch (error) {
-            throw error;
+    validateLength(options) {
+        if (options.fieldsToCheck.length === 0) return null;
+        let defaultOptions = {
+            sourceObject: {},
+            fieldsToCheck: [],
+            min: 3,
+            max: 15
         }
+
+        for (let prop in defaultOptions) {
+            if (options.hasOwnProperty(prop)) defaultOptions[prop] = options[prop];
+        }
+
+        let minLength = defaultOptions.min;
+        let maxLength = defaultOptions.max;
+        let validationResponse = {
+            success: true
+        }
+        for (let field of defaultOptions.fieldsToCheck) {
+            let fieldLength = defaultOptions.sourceObject[field].trim().length;
+            if (fieldLength < minLength || fieldLength > maxLength) {
+                validationResponse = {
+                    success: false,
+                    message: `${field || "field"} must be at least ${minLength} but not longer than ${maxLength}.`
+                }
+            }
+        }
+        return validationResponse;
     }
 
     numberCheck(number) {
