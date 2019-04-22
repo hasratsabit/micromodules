@@ -4,11 +4,10 @@ const ModelLoader = require('./ModelLoader').getInstance();
 class ServiceLoader {
     constructor() {}
 
-    loadServices(directoryPath, identifier = "") {
+    loadServices(directoryPath, modelsList, identifier = "") {
         if(!directoryPath) throw new Error("No directory is provided.");
         identifier = identifier || "service";
         let servicesArray = FileLoader.loadFiles(directoryPath, identifier);
-        let modelsList = ModelLoader.loadModels(directoryPath);
         let servicesList = new Map();
         for(let serviceObject of servicesArray) {
             let service = serviceObject.getService();
