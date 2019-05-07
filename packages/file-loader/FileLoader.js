@@ -11,8 +11,8 @@ class FilesLoader {
     processFile(fileName, filterIdentifier) {
         if(!fileName || !filterIdentifier) throw new Error("One of the parameters is missing.");
         let splitedFileName = fileName.split(".");
-        if(!splitedFileName && splitedFileName.length < 3) return false;
-        return splitedFileName[splitedFileName.length - 2] === filterIdentifier;
+        if(!splitedFileName && splitedFileName.length < 2) return false;
+        return splitedFileName.some(splitedName => splitedName === filterIdentifier);
     }
 
     loadFilesPath(directoryPath) {
@@ -33,17 +33,20 @@ class FilesLoader {
         return combinedFilesPathArray;  
     }
 
-    loadFiles(directory, identifier) {
-        if(!directory || !identifier) throw new Error("One or more parameters are missing.");
+    loadFiles(directory, identifier = "") {
+        if(!directory) throw new Error("One or more parameters are missing.");
+        let identifierExist = true;
+        if(!identifier || identifier.length === 0) identifierExist = false;
         let filesPathArray = this.loadFilesPath(directory);
         if(!filesPathArray || filesPathArray.length === 0) return [];
         let loadedFilesArray = [];
         for(let filePath of filesPathArray) {
             let baseFileName = path.basename(filePath);
-            let isFileMatched = this.processFile(baseFileName, identifier);
+            let isFileMatched = identifierExist ? this.processFile(baseFileName, identifier) : true;
             let loadedFile;
             if(isFileMatched) loadedFile = require(path.resolve(filePath));
-            if(typeof loadedFile === 'function') loadedFilesArray.push(loadedFile); 
+            let objectType = Object.keys(loadedFile).length !== 0;
+            if(typeof loadedFile === 'function' || typeof loadedFile === objectType) loadedFilesArray.push(loadedFile); 
         }
         return loadedFilesArray;
     }

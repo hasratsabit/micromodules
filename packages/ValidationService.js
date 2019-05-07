@@ -11,7 +11,7 @@ class ValidationService {
         }
 
         for (let prop in defaultOptions) {
-            if (options.hasOwnProperty(prop)) defaultOptions[prop] = options[prop];
+            if(options.hasOwnProperty(prop)) defaultOptions[prop] = options[prop];
         }
 
         let minLength = defaultOptions.min;
