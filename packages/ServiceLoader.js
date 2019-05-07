@@ -1,5 +1,4 @@
 const FileLoader = require("./FileLoader").getInstance();
-const ModelLoader = require('./ModelLoader').getInstance();
 
 class ServiceLoader {
     constructor() {}
