@@ -3,6 +3,7 @@ const fs= require('fs');
 const path = require('path');
 
 class FilesLoader {
+
     isDirectory(source) {
         return fs.lstatSync(source).isDirectory(); 
     }
@@ -54,5 +55,7 @@ class FilesLoaderSingleton {
         return FilesLoaderSingleton.instance;
     }
 }
+
+console.log(FilesLoaderSingleton.getInstance().loadFiles("components", "service"));
 
 module.exports = FilesLoaderSingleton;
